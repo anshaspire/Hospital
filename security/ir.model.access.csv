@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access.hospital.patients,access_hospital_patients,hospital_mangement.model_hospital_patient,base.group_user,1,1,1,1
+access.hospital.appointment,access_hospital_appointment,hospital_mangement.model_hospital_appointment,base.group_user,1,1,1,1
+access.hospital.pharmacy,access_hospital_pharmacy,hospital_mangement.model_hospital_pharmacy,base.group_user,1,1,1,1
+access.patient.send.email,access_patient_send_email,hospital_mangement.model_patient_send_email,base.group_user,1,1,1,1
+access.cancel.wizard,access_cancel_wizard,hospital_mangement.model_cancel_wizard,base.group_user,1,1,1,1
+access.hospital.operation,access_hospital_operation,hospital_mangement.model_hospital_operation,base.group_user,1,1,1,1
+access.hospital.appointment_copy,access_hospital_appointment_copy,hospital_mangement.model_hospital_appointment_copy,base.group_user,1,1,1,1

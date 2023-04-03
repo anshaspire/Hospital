@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="send_email" model="ir.actions.act_window">
+            <field name="name">Send Email</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">patient_send_email</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+        <record id="s" model="ir.ui.view">
+            <field name="name">send_email</field>
+            <field name="model">patient_send_email</field>
+            <field name="arch" type="xml">
+                <form string="">
+                    <sheet>
+                        <group>
+                            <!-- <field name="patient" widget="many2many_tags"/>
+                            <field name="email_name" /> -->
+                            <field name="tag_ids" widget="many2many_tags"/>
+                        </group>
+                    </sheet>
+                    <footer>
+                        <button name="send_mail_action" string="Send" type="object" class="oe_highlight"/>   
+                    </footer>
+                </form>
+            </field>
+        </record>
+        
+        <record id="patient_email" model="mail.template">
+            <field name="name">Paitent email</field>
+            <field name="subject">Email Process </field>
+            <field name="email_from">{{(user.email)}}</field>
+            <field name="email_to">{{(object.email_id)}}</field>
+            <field name="model_id" ref="hospital_mangement.model_hospital_patient" />
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <div style="font-family: Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; max-width: 600px; font-size: 14px; margin: 0 auto; ;padding: 0px; box-sizing: border-box;border:1px solid #ddd;">                        <!-- HEADER -->                        
+                    <table class="head-wrap" style="border-bottom: 1px solid #ddd; width: 100%; padding: 5px; background: #d6e4e7; border-collapse: collapse; border-spacing: 0;">                            
+                        <tbody>                                
+                            <tr>                                    
+                                <td class="header" style="padding: 5px;">                                  
+                                    <div class="container" style="display: block!important; max-width: 600px!important; margin: 0 auto!important; clear: both!important;">                                            
+                                    <div class="content"><img style="display: table-cell; vertical-align: inherit;" src="https://aspiresoftware.in/images/odoo_images/logo.png" alt=""/></div>                                        </div>                                    
+                                </td>
+                            </tr>                            
+                        </tbody>                        
+                    </table>                             
+                    <table class="body-wrap" style="width: 100%; border-collapse: collapse; border-spacing: 0;">
+                    <tbody>
+                        <tr>                                    
+                            <td bgcolor="#FFFFFF">                                        
+                                <div class="container" style="display: block!important; max-width: 600px!important; margin: 0 auto!important; clear: both!important;">                                            
+                                    <div class="content" style="padding: 10px; max-width: 600px; margin: 0 auto; display: block;">                                                
+                                        <table width="100%">                                                    
+                                            <tbody>                                                        
+                                                <tr>                                                            
+                                                    <td>                                                                
+                                                        <p style="font-weight: 500; font-size: 27px; margin-bottom: 15px;">Hello, 
+                                                            <span t-field="object.name"/></p>
+                                                            <t t-foreach="ctx.get('url')" t-as="rct">
+                                                                <p><t t-esc="rct"/></p>
+                                                            </t>
+
+                                                            
+                                                        <p style="margin: 0px; font-weight: normal; font-size: 14px; line-height: 1.6;">                                                                    
+                                                                Cell: +91-635-308-6224 | Desk: +91-79-2640-9959
+                                                        </p>                         
+                                                        <br/>
+                                                        <p><img src="https://aspiresoftware.in/images/odoo_images/logo.png"/></p> 
+                                                    </td>                                                            
+                                                </tr>                                                        
+                                            </tbody>                                                    
+                                        </table>                                                    
+                                        <br/>
+                                    </div>                                                
+                                </div>                                            
+                            </td>                                        
+                        </tr>                                    
+                    </tbody>                                
+                    </table>                            
+                </div>
+            </field>
+        </record>  
+    </data>
+</odoo>

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_patient_tree" model="ir.ui.view">
+        <field name="model">hospital.patient</field>
+        <field name="arch" type="xml">
+            <tree sample="1">
+                <field name="name"/>
+                <field name="ref"/>
+                <field name="age"/>
+                <field name="gender"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_patient_form" model="ir.ui.view">
+        <field name="model">hospital.patient</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="alert alert-warning text-center o_form_header" role="alert" attrs="{'invisible' : [('is_birthday','=',False)]}">
+                        <a class="close" data-dismiss="alert" href="#">x</a>
+                        <div>
+                            <strong>Today is a birthday</strong>
+                        </div>
+                        <div>Wish <field name="name" readonly="1"/>
+                        </div>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="dateofbirth" />
+                            <field name="ref"/>
+                            <field name="email_id" widget="email"/>
+                        </group>
+                        <group>
+                            <field name="age"/>
+                            <field name="gender"/>
+                            <field name="appointment_id" />
+                            <field name="is_birthday" invisible="1"/>
+                            <field name="active" invisible="1"/>
+                        </group>   
+                    </group>
+                    <group name="other_info" string="Other Information">
+                        <group>                            
+                            <field name="phone" widget="phone"/>
+                            <field name="website" widget="url"/>
+                        </group>
+                    </group>
+                </sheet>
+                <!--chatter-->
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.gruop_user"/>
+                    <field name="activity_ids" />
+                    <field name="message_ids" />
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="action_sent_email" model="ir.actions.server">
+        <field name="name">Send Email</field>
+        <field name="model_id" ref="hospital_mangement.model_hospital_patient"/>
+        <field name="binding_model_id" ref="hospital_mangement.model_hospital_patient"/>
+        <field name="state">code</field>
+        <field name="binding_view_types">form</field>
+        <field name="code">
+            if record:
+                action_values = env.ref('hospital_mangement.send_email').sudo().read()[0]
+                action_values.update({'context':env.context}) 
+                action = action_values
+        </field>
+    </record>   
+    
+    <record id="view_patient_search" model="ir.ui.view">
+        <field name="model">hospital.patient</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" filter_domain="['|',('name', 'ilike', self),('ref', 'ilike', self)]"/>
+                <field name="ref"/>
+                <field name="dateofbirth" />
+                <field name="age"/>
+                <field name="gender"/>
+                <filter name="filter_male" string="Male" domain="[('gender', '=', 'Male')]"/>
+                <filter name="filter_female" string="Female" domain="[('gender', '=', 'Female')]"/>
+                    <!-- <separator/>
+                    <filter name="Kids" string="Kids" domain="[('age', '&lt;=', 6)]"/>-->
+                    <separator/>
+                <filter name="Archived" string="Archived" domain="[('active', '=', False)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="Gender" string="Group_By_Gender"  context="{'group_by': 'gender'}" />
+                </group>
+                <searchpanel>
+                    <field name="gender" string="Gender" enable_counters="1"/>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_hospital_patient" model="ir.actions.act_window">
+        <field name="name">Patients</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hospital.patient</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view">
+                Create your first Patient !
+            </p>
+        </field>
+    </record>
+    <record id="action_female_patient" model="ir.actions.act_window">
+        <field name="name">Female Patients</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">hospital.patient</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'default_gender':'Female'}</field>
+        <field name="domain">[('gender', '=', 'Female')]</field>
+        <field name="help" type="html">
+            <p class="o_view">
+                Create your first Patient !
+            </p>
+        </field>
+        
+    </record>
+    <menuitem
+        id="hospital_menu"
+        name="Hospital"
+        sequence="0"/>
+    
+    <menuitem
+        id="hospital_patient"
+        name="Patient"
+        parent = "hospital_menu"
+        sequence="0"/>
+    
+    
+
+    
+    
+    <menuitem
+        id="hospital_pateint_details"
+        name="Patient Details"
+        action="action_hospital_patient"
+        parent = "hospital_patient"
+        sequence="0"/>
+    <menuitem
+        id="female_pateint_details"
+        name="Female Details"
+        action="action_female_patient"
+        parent = "hospital_patient"
+        sequence="20"/>
+</odoo>
